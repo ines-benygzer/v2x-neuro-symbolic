@@ -1,0 +1,191 @@
+@prefix v2x: <http://example.org/v2x#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# V2X Neuro-Symbolic Ontology
+#
+# Knowledge representation for cooperative V2X perception
+# and semantic reasoning.
+#################################################################
+
+v2x:Actor a rdfs:Class ;
+    rdfs:label "Actor" ;
+    rdfs:comment "Mobile entities present in the observed traffic scene." .
+
+v2x:Vehicle a rdfs:Class ;
+    rdfs:subClassOf v2x:Actor ;
+    rdfs:label "Vehicle" .
+
+v2x:VRU a rdfs:Class ;
+    rdfs:subClassOf v2x:Actor ;
+    rdfs:label "Vulnerable Road User" .
+
+v2x:Car a rdfs:Class ;
+    rdfs:subClassOf v2x:Vehicle ;
+    rdfs:label "Car" .
+
+v2x:Van a rdfs:Class ;
+    rdfs:subClassOf v2x:Vehicle ;
+    rdfs:label "Van" .
+
+v2x:Bus a rdfs:Class ;
+    rdfs:subClassOf v2x:Vehicle ;
+    rdfs:label "Bus" .
+
+v2x:Motorcyclist a rdfs:Class ;
+    rdfs:subClassOf v2x:VRU ;
+    rdfs:label "Motorcyclist" .
+
+v2x:Cyclist a rdfs:Class ;
+    rdfs:subClassOf v2x:VRU ;
+    rdfs:label "Cyclist" .
+
+v2x:Pedestrian a rdfs:Class ;
+    rdfs:subClassOf v2x:VRU ;
+    rdfs:label "Pedestrian" .
+
+
+#################################################################
+# Map elements
+#################################################################
+
+v2x:MapElement a rdfs:Class ;
+    rdfs:label "Map Element" ;
+    rdfs:comment "Static elements of the road infrastructure." .
+
+v2x:Crosswalk a rdfs:Class ;
+    rdfs:subClassOf v2x:MapElement ;
+    rdfs:label "Crosswalk" .
+
+v2x:Junction a rdfs:Class ;
+    rdfs:subClassOf v2x:MapElement ;
+    rdfs:label "Junction" .
+
+v2x:Lane a rdfs:Class ;
+    rdfs:subClassOf v2x:MapElement ;
+    rdfs:label "Lane" .
+
+
+#################################################################
+# Semantic relations
+#################################################################
+
+v2x:Relation a rdfs:Class ;
+    rdfs:label "Semantic Relation" ;
+    rdfs:comment "High-level situation inferred by the LLM." .
+
+v2x:RiskRelation a rdfs:Class ;
+    rdfs:subClassOf v2x:Relation ;
+    rdfs:label "Risk Relation" .
+
+v2x:SpatialRelation a rdfs:Class ;
+    rdfs:subClassOf v2x:Relation ;
+    rdfs:label "Spatial Relation" .
+
+v2x:ActionRelation a rdfs:Class ;
+    rdfs:subClassOf v2x:Relation ;
+    rdfs:label "Action Relation" .
+
+
+#################################################################
+# Geometric relations: object-to-object
+#################################################################
+
+v2x:near a rdf:Property ;
+    rdfs:label "near" ;
+    rdfs:domain v2x:Actor ;
+    rdfs:range v2x:Actor .
+
+v2x:front_of a rdf:Property ;
+    rdfs:label "front of" ;
+    rdfs:domain v2x:Actor ;
+    rdfs:range v2x:Actor .
+
+v2x:collision_risk a rdf:Property ;
+    rdfs:label "collision risk" ;
+    rdfs:domain v2x:Actor ;
+    rdfs:range v2x:Actor .
+
+v2x:same_lane a rdf:Property ;
+    rdfs:label "same lane" ;
+    rdfs:domain v2x:Actor ;
+    rdfs:range v2x:Actor .
+
+v2x:converge_on a rdf:Property ;
+    rdfs:label "converges on" ;
+    rdfs:domain v2x:Actor ;
+    rdfs:range v2x:Actor .
+
+
+#################################################################
+# Geometric relations: object-to-map
+#################################################################
+
+v2x:inside_crosswalk a rdf:Property ;
+    rdfs:label "inside crosswalk" ;
+    rdfs:domain v2x:Actor ;
+    rdfs:range v2x:Crosswalk .
+
+v2x:inside_intersection a rdf:Property ;
+    rdfs:label "inside intersection" ;
+    rdfs:domain v2x:Actor ;
+    rdfs:range v2x:Junction .
+
+v2x:approaching_crosswalk a rdf:Property ;
+    rdfs:label "approaching crosswalk" ;
+    rdfs:domain v2x:Actor ;
+    rdfs:range v2x:Crosswalk .
+
+v2x:at_stop_line a rdf:Property ;
+    rdfs:label "at stop line" ;
+    rdfs:domain v2x:Actor ;
+    rdfs:range v2x:MapElement .
+
+
+#################################################################
+# Inter-agent visibility
+#################################################################
+
+v2x:detected_by a rdf:Property ;
+    rdfs:label "detected by" ;
+    rdfs:domain v2x:Actor .
+
+v2x:visible_to a rdf:Property ;
+    rdfs:label "visible to" ;
+    rdfs:domain v2x:Actor .
+
+v2x:invisible_to a rdf:Property ;
+    rdfs:label "invisible to" ;
+    rdfs:domain v2x:Actor .
+
+v2x:missing_from a rdf:Property ;
+    rdfs:label "missing from" ;
+    rdfs:domain v2x:Actor .
+
+
+#################################################################
+# Semantic relation properties
+#################################################################
+
+v2x:hasRiskSubject a rdf:Property ;
+    rdfs:label "has risk subject" ;
+    rdfs:domain v2x:RiskRelation ;
+    rdfs:range v2x:Actor .
+
+v2x:hasRiskObject a rdf:Property ;
+    rdfs:label "has risk object" ;
+    rdfs:domain v2x:RiskRelation ;
+    rdfs:range v2x:MapElement .
+
+v2x:hasEvidence a rdf:Property ;
+    rdfs:label "has evidence" .
+
+v2x:hasConfidence a rdf:Property ;
+    rdfs:label "has confidence" ;
+    rdfs:range xsd:float .
+
+v2x:reasoningText a rdf:Property ;
+    rdfs:label "reasoning text" ;
+    rdfs:range xsd:string .
